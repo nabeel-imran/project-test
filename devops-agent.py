@@ -37,6 +37,9 @@ def setup_git(github_repo):
 
     if push_result.returncode != 0:
         print("🔁 Remote has existing content, pulling and retrying push...")
+
+        # 🧠 Set rebase strategy automatically to avoid pull errors
+        run_cmd("git config pull.rebase false")
         run_cmd("git pull origin main --allow-unrelated-histories")
         run_cmd("git push -u origin main")
 
@@ -52,7 +55,7 @@ def run_container(image_name):
     run_cmd(f"docker run -d -p 5000:5000 {image_name}", exit_on_fail=False)
 
 def main():
-    print("🧠 DevOps Agent: GitHub & Docker Automation")
+    print("🧠 DevOps Agent: GitHub & Docker Automation (Fully Auto)")
 
     github_repo = input("🔗 Enter your GitHub repo URL: ").strip()
     docker_image = input("🐳 Enter Docker image name (username/repo): ").strip()
@@ -69,7 +72,7 @@ def main():
     if run_container_flag:
         run_container(docker_image)
 
-    print("\n✅ DevOps Agent Complete: Code pushed, image published, container running (if chosen).")
+    print("\n✅ All done! Your code is pushed, image published, and container running if selected.")
 
 if __name__ == "__main__":
     main()
